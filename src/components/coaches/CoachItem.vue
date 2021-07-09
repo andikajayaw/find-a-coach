@@ -11,9 +11,7 @@
       <base-button mode="outline" link :to="coachContactLink"
         >Contact</base-button
       >
-      <base-button mode="outline" link :to="coachDetailLink"
-        >View Details</base-button
-      >
+      <base-button link :to="coachDetailLink">View Details</base-button>
     </div>
   </li>
 </template>
@@ -29,7 +27,7 @@ export default {
       return this.$route.path + this.id + '/contact'; ///coaches/c1/contact
     },
     coachDetailLink() {
-      return this.$route.path + this.id; ///coaches/c1
+      return this.$route.path + '/' + this.id; ///coaches/c1
     },
   },
 };
