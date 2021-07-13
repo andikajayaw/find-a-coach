@@ -30,20 +30,20 @@
     </div>
     <div class="form-control">
       <label for="rate">Hourly Rate</label>
-      <input type="number" name="rate" id="rate" v-model.number="rate" />
+      <input type="number" name="rate" id="rate" v-model.number="hourlyRate" />
     </div>
     <div class="form-control">
       <h3>Area of Expertise</h3>
       <div>
-        <input type="checkbox" name="frontend" id="frontend" v-model="areas" />
+        <input type="checkbox" value="frontend" id="frontend" v-model="areas" />
         <label for="frontend">Frontend Dev</label>
       </div>
       <div>
-        <input type="checkbox" name="backend" id="backend" v-model="areas" />
+        <input type="checkbox" value="backend" id="backend" v-model="areas" />
         <label for="backend">Backend Dev</label>
       </div>
       <div>
-        <input type="checkbox" name="carrer" id="carrer" v-model="areas" />
+        <input type="checkbox" value="carrer" id="carrer" v-model="areas" />
         <label for="carrer">Carrer Consultant</label>
       </div>
     </div>
@@ -53,11 +53,12 @@
 
 <script>
 export default {
+  emits: ['save-data'],
   data() {
     return {
       firstName: '',
       lastName: '',
-      descriptionL: '',
+      description: '',
       hourlyRate: null,
       areas: [],
     };
@@ -72,6 +73,7 @@ export default {
         areas: this.areas,
       };
       console.log(formData);
+      this.$emit('save-data', formData);
     },
   },
 };
