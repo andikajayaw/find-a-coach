@@ -18,7 +18,8 @@ export default {
         // const responseData = await response.json();
 
         if (!response.ok) {
-            // error
+            const error = new Error(responseData.message || 'Failed to create mentor!');
+            throw error;
         }
 
         context.commit('registerCoach', { ...coachData, id: userId });
@@ -27,7 +28,8 @@ export default {
         const response = await fetch(`https://find-a-coach-vue-1befc-default-rtdb.firebaseio.com/coaches.json`);
         const responseData = await response.json();
         if (!response.ok) {
-            //error
+            const error = new Error(responseData.message || 'Failed to fetch!');
+            throw error;
         }
         const coaches = [];
 
