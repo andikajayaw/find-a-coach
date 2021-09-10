@@ -69,17 +69,19 @@ export default {
         this.formIsValid = false;
         return;
       }
+
+      const actionPayload = {
+        email: this.email,
+        password: this.password,
+      };
       this.isLoading = true;
 
       try {
         // send http request
         if (this.mode === 'login') {
-          //
+          await this.$store.dispatch('login', actionPayload);
         } else {
-          await this.$store.dispatch('signup', {
-            email: this.email,
-            password: this.password,
-          });
+          await this.$store.dispatch('signup', actionPayload);
         }
       } catch (error) {
         this.error = error.message || 'Failed to Sign Up';
