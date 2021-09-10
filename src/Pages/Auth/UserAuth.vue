@@ -15,7 +15,9 @@
         />
       </div>
       <p v-if="!formIsValid">Please enter a valid email/password</p>
-      <base-button @click="submitForm">{{ submitButtonCaption }}</base-button>
+      <base-button @click.prevent="submitForm">{{
+        submitButtonCaption
+      }}</base-button>
       <base-button type="button" mode="flat" @click="switchAuthMode">{{
         switchModeButton
       }}</base-button>
@@ -60,6 +62,14 @@ export default {
         return;
       }
       // send http request
+      if (this.mode === 'login') {
+        //
+      } else {
+        this.$store.dispatch('signup', {
+          email: this.email,
+          password: this.password,
+        });
+      }
     },
     switchAuthMode() {
       if (this.mode === 'login') {
