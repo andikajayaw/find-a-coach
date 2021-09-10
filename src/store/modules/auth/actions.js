@@ -16,7 +16,7 @@ export default {
             throw error;
         }
 
-        console.log(responseData);
+        console.log(responseData.idToken);
 
         context.commit('setUser', {
             token: responseData.idToken,

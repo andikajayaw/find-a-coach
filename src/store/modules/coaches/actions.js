@@ -10,7 +10,10 @@ export default {
             areas: data.areas,
         };
 
-        const response = await fetch(`https://find-a-coach-vue-1befc-default-rtdb.firebaseio.com/coaches/${userId}.json`, {
+        const token = context.rootGetters.token;
+        console.log(token);
+
+        const response = await fetch(`https://find-a-coach-vue-1befc-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`, {
             method: 'PUT',
             body: JSON.stringify(coachData)
         });
