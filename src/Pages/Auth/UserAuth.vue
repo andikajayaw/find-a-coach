@@ -83,6 +83,9 @@ export default {
         } else {
           await this.$store.dispatch('signup', actionPayload);
         }
+        const redirectUrl = this.$route.query.redirect || 'coaches';
+        const redirect = `/${redirectUrl}`;
+        this.$router.replace(`${redirect}`);
       } catch (error) {
         this.error = error.message || 'Failed to Sign Up';
       }
