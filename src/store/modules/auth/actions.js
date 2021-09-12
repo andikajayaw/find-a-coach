@@ -1,6 +1,23 @@
 export default {
     async login(context, payload) {
-        const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBzJodbDRZzTpkmCRWOUHCDShxnFUpHXuM', {
+        return context.dispatch('auth', {
+            ...payload,
+            mode: 'login'
+        });
+    },
+    async signup(context, payload) {
+        return context.dispatch('auth', {
+            ...payload,
+            mode: 'signup'
+        });
+    },
+    async auth(context, payload) {
+        const mode = payload.mode;
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBzJodbDRZzTpkmCRWOUHCDShxnFUpHXuM';
+        if (mode === 'signup') {
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBzJodbDRZzTpkmCRWOUHCDShxnFUpHXuM';
+        }
+        const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
                 email: payload.email,
@@ -12,11 +29,12 @@ export default {
 
         if (!response.ok) {
             console.log(responseData);
-            const error = new Error(responseData.message || 'Failed sign in');
+            const error = new Error(responseData.error.message || 'Failed! Check ');
             throw error;
         }
 
-        console.log(responseData.idToken);
+        localStorage.setItem('token', responseData.idToken);
+        localStorage.setItem('userId', responseData.localId);
 
         context.commit('setUser', {
             token: responseData.idToken,
@@ -24,30 +42,18 @@ export default {
             tokenExpiration: responseData.expiresIn,
         });
     },
-    async signup(context, payload) {
-        const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBzJodbDRZzTpkmCRWOUHCDShxnFUpHXuM', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: payload.email,
-                password: payload.password,
-                returnSecureToken: true
-            })
-        });
-        const responseData = await response.json();
+    tryLogin(context) {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
 
-        if (!response.ok) {
-            console.log(responseData);
-            const error = new Error(responseData.message || 'Failed sign up');
-            throw error;
+        if (token && userId) {
+            context.commit('setUser', {
+                token: token,
+                userId: userId,
+                tokenExpiration: null
+            });
         }
 
-        console.log(responseData);
-
-        context.commit('setUser', {
-            token: responseData.idToken,
-            userId: responseData.localId,
-            tokenExpiration: responseData.expiresIn,
-        });
     },
     logout(context) {
         context.commit('setUser', {
